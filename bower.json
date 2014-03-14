@@ -1,0 +1,14 @@
+{
+  "name": "init-webapp",
+  "version": "0.0.0",
+  "dependencies": {
+    "normalize-css": "*",
+    "bootstrap": "*",
+    "modernizr": "*",
+    "jquery": "*",
+    "spinjs": "*",
+    "font-awesome": "~4.0.3",
+    "angular-ui-router": "~0.2.10"
+  },
+  "devDependencies": {}
+}

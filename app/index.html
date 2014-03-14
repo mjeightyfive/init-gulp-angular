@@ -1,0 +1,50 @@
+<!doctype html>
+<!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
+<!--[if IE 7]><html class="no-js lt-ie9 lt-ie8"><![endif]-->
+<!--[if IE 8]><html class="no-js lt-ie9"><![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js" ng-app="myApp"><!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title><%= name %></title>
+        <meta name="description" content="<%= description %>">
+        <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" href="style.css">
+        <script src="modernizr.js"></script>
+    </head>
+    <body>
+        <!--[if lt IE 10]><p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
+        <div class="container">
+            <div class="row">
+                <nav class="navbar navbar-default" role="navigation">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" ui-sref="home"><%= name %></a>
+                        <ul class="nav navbar-nav">
+                            <li><a ui-sref="home">Home</a></li>
+                            <li><a ui-sref="about">About</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="well">
+                    <div ui-view></div>
+                </div>
+            </div>
+
+            <div class="footer">
+                <p><i class="fa fa-twitter-square"></i> <%= author %></p>
+            </div>
+        </div>
+    <!--INJECT:jslibs-->
+    <!--END INJECT-->
+
+    <!--INJECT:jsapp-->
+    <!--END INJECT-->
+
+    <!--INJECT:scripts-->
+    <!--END INJECT-->  
+</body>
+</html>
