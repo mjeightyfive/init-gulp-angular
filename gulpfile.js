@@ -22,7 +22,7 @@ var config = require('./package.json').config,
     autoprefixer = require('gulp-autoprefixer'),
     minifycss = require('gulp-minify-css'),
     karma = require('gulp-karma'),
-    ee = require('streamee'),
+    streamqueue = require('streamqueue'),
     size = require('gulp-size'),
     app = express(),
     sitemap = require('gulp-sitemap'),
@@ -182,12 +182,12 @@ gulp.task('fonts', function(){
 });
 
 gulp.task('styles', function(){
-    ee.concatenate([
+    return streamqueue({ objectMode: true },
         gulp.src(config.css),
         gulp.src(config.sass)
             .pipe(sass({
                 includePaths: ['./app/scss']
-            }))
+            })))
             .pipe(gif(live, (autoprefixer(
                 'last 2 version', 
                 'safari 5', 
@@ -197,15 +197,14 @@ gulp.task('styles', function(){
                 'ios 6', 
                 'android 4'
             ))))      
-    ])
-    .pipe(size({ showFiles: config.report }))
-    .pipe(concat('style.css'))
-    .pipe(gif(live, minifycss({ 
-        keepSpecialComments: 0
-    })))  
-    .pipe(size({ showFiles: config.report }))
-    .pipe(gulp.dest(config.dest))
-	.pipe(refresh(lrserver));
+            .pipe(size({ showFiles: config.report }))
+            .pipe(concat('style.css'))
+            .pipe(gif(live, minifycss({ 
+                keepSpecialComments: 0
+            })))  
+            .pipe(size({ showFiles: config.report }))
+            .pipe(gulp.dest(config.dest))
+            .pipe(refresh(lrserver));
 
     gutil.log(gutil.colors.bgGreen('Styles done!'));
 
@@ -215,10 +214,10 @@ gulp.task('scripts', function(){
 
     if (live) {
 
-        ee.concatenate([
+        return streamqueue({ objectMode: true },
             gulp.src(config.jslibs),
             gulp.src(config.jsapp)
-        ])
+        )
         .pipe(concat('scripts.js'))
         .pipe(uglify())
         .pipe(gulp.dest(config.dest))  
