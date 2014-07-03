@@ -181,7 +181,6 @@ ClientBin/
 *.dbproj.schemaview
 *.pfx
 *.publishsettings
-node_modules/
 
 # RIA/Silverlight projects
 Generated_Code/
@@ -246,11 +245,8 @@ results
 build
 .grunt
 
-node_modules
-
-
 ### Bower ###
-bower_components
+bower_components/
 
 
 ### Linux ###
@@ -259,7 +255,6 @@ bower_components
 
 ### Yeoman ###
 node_modules/
-bower_components/
 *.log
 
 build/

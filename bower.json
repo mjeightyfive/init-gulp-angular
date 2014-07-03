@@ -7,9 +7,9 @@
     "modernizr": "*",
     "jquery": "*",
     "spinjs": "*",
-    "font-awesome": "~4.0.3",
-    "angular-ui-router": "~0.2.10",
-    "angular-bootstrap": "~0.10.0"
+    "font-awesome": "*",
+    "angular-ui-router": "*",
+    "angular-bootstrap": "*"
   },
   "devDependencies": {}
 }
