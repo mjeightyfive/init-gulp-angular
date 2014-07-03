@@ -2,12 +2,9 @@
   "name": "init-webapp",
   "version": "0.0.0",
   "dependencies": {
-    "normalize-css": "*",
     "bootstrap": "*",
     "modernizr": "*",
     "jquery": "*",
-    "spinjs": "*",
-    "font-awesome": "*",
     "angular-ui-router": "*",
     "angular-bootstrap": "*"
   },
