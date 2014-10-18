@@ -43,7 +43,6 @@ var htmlopts = {
 
 gulp.task('clean', del.bind(null, [config.paths.dist]));
 
-// Build Production Files, the Default Task
 gulp.task('default', ['clean'], function() {
     sequence([
             'html',
@@ -58,31 +57,72 @@ gulp.task('default', ['clean'], function() {
     );
 });
 
-gulp.task('serve', function() {
-    browserSync({
-        notify: true,
-        // Run as an https by uncommenting 'https: true'
-        // Note: this uses an unsigned certificate which on first access
-        //       will present a certificate warning in the browser.
-        // https: true,
-        server: {
-            baseDir: config.paths.dist
-        }
-    });
-
-    gulp.watch([config.paths.app + '/**/*.html'], ['inject'], reload);
-    gulp.watch([config.paths.app + '/scss/**/*.scss'], ['styles']);
-    gulp.watch([config.paths.app + '/js/**/*.js'], ['scripts', reload]);
-    gulp.watch([config.paths.app + '/images/**/*'], reload);
-
-});
-
 gulp.task('html', function() {
 
     gulp.src([
         config.paths.app + '/**/*.html',
         '!' + config.paths.app + '/index.*'
     ])
+        .pipe(gulp.dest(config.paths.dist));
+});
+
+gulp.task('scripts', function() {
+
+    if (live) {
+
+        return streamqueue({
+                objectMode: true
+            },
+            gulp.src(config.files.jslibs),
+            gulp.src(config.files.jsapp)
+            .pipe($.concat('app.js'))
+        )
+            .pipe($.concat('scripts.js'))
+            .pipe($.uglify())
+            .pipe($.
+                if (live, $.size({
+                    showFiles: true
+                })))
+            .pipe(gulp.dest(config.paths.dist));
+
+    } else {
+
+        gulp.src(config.files.jslibs)
+            .pipe($.concat('libs.js'))
+            .pipe($.changed(config.paths.dist))
+            .pipe($.uglify())
+            .pipe(gulp.dest(config.paths.dist));
+
+        gulp.src(config.files.jsapp)
+            .pipe($.concat('app.js'))
+            .pipe($.changed(config.paths.dist))
+            .pipe(gulp.dest(config.paths.dist));
+    }
+});
+
+gulp.task('fonts', function() {
+    return gulp.src(config.files.fonts)
+        .pipe(gulp.dest(config.paths.dist + '/fonts'))
+        .pipe($.size({
+            title: 'fonts'
+        }));
+});
+
+gulp.task('images', function() {
+    return gulp.src(config.paths.app + '/images/**/*')
+        .pipe($.imagemin({
+            progressive: true,
+            interlaced: true
+        }))
+        .pipe(gulp.dest(config.paths.dist + '/images'))
+        .pipe($.size({
+            title: 'images',
+            showFiles: true
+        }));
+});
+
+gulp.task('files', function() {
+    gulp.src(config.files.other)
         .pipe(gulp.dest(config.paths.dist));
 });
 
@@ -113,43 +153,6 @@ gulp.task('inject', function() {
             .pipe(reload({
                 stream: true
             }));
-
-    }
-
-});
-
-gulp.task('scripts', function() {
-
-    if (live) {
-
-        return streamqueue({
-                objectMode: true
-            },
-            gulp.src(config.files.jslibs),
-            gulp.src(config.files.jsapp)
-            .pipe($.concat('app.js'))
-        )
-            .pipe($.concat('scripts.js'))
-            .pipe($.uglify())
-            .pipe($.
-                if (live, $.size({
-                    showFiles: true
-                })))
-            .pipe(gulp.dest(config.paths.dist));
-
-
-    } else {
-
-        gulp.src(config.files.jslibs)
-            .pipe($.concat('libs.js'))
-            .pipe($.changed(config.paths.dist))
-            .pipe($.uglify())
-            .pipe(gulp.dest(config.paths.dist));
-
-        gulp.src(config.files.jsapp)
-            .pipe($.concat('app.js'))
-            .pipe($.changed(config.paths.dist))
-            .pipe(gulp.dest(config.paths.dist));
     }
 });
 
@@ -207,6 +210,25 @@ gulp.task('styles', function() {
         }));
 });
 
+gulp.task('serve', function() {
+    browserSync({
+        notify: true,
+        // Run as an https by uncommenting 'https: true'
+        // Note: this uses an unsigned certificate which on first access
+        //       will present a certificate warning in the browser.
+        // https: true,
+        server: {
+            baseDir: config.paths.dist
+        }
+    });
+
+    gulp.watch([config.paths.app + '/**/*.html'], ['inject'], reload);
+    gulp.watch([config.paths.app + '/scss/**/*.scss'], ['styles']);
+    gulp.watch([config.paths.app + '/js/**/*.js'], ['scripts', reload]);
+    gulp.watch([config.paths.app + '/images/**/*'], reload);
+
+});
+
 gulp.task('jshint', function() {
     return gulp.src(config.paths.app + '/js/**/*.js')
         .pipe(reload({
@@ -217,30 +239,4 @@ gulp.task('jshint', function() {
         .pipe($.jshint.reporter('jshint-stylish'))
         .pipe($.
             if (!browserSync.active, $.jshint.reporter('fail')));
-});
-
-gulp.task('images', function() {
-    return gulp.src(config.paths.app + '/images/**/*')
-        .pipe($.cache($.imagemin({
-            progressive: true,
-            interlaced: true
-        })))
-        .pipe(gulp.dest(config.paths.dist + '/images'))
-        .pipe($.size({
-            title: 'images',
-            showFiles: true
-        }));
-});
-
-gulp.task('fonts', function() {
-    return gulp.src(config.files.fonts)
-        .pipe(gulp.dest(config.paths.dist + '/fonts'))
-        .pipe($.size({
-            title: 'fonts'
-        }));
-});
-
-gulp.task('files', function() {
-    gulp.src(config.files.other)
-        .pipe(gulp.dest(config.paths.dist));
 });
