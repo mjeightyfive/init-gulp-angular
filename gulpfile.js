@@ -166,6 +166,7 @@ gulp.task('styles', function() {
         .pipe($.changed('css', {
             extension: '.scss'
         }))
+        .pipe($.plumber())
         .pipe($.rubySass({
             style: 'expanded',
             precision: 10
