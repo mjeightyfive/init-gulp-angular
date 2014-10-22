@@ -9,7 +9,6 @@ var paths = {
 var files = {
     jslibs: [
         paths.bower + '/angular/angular.js',
-        paths.bower + '/angular/angular.js',
         paths.bower + '/angular-bootstrap/ui-bootstrap.js',
         paths.bower + '/angular-bootstrap/ui-bootstrap-tpls.js',
         paths.bower + '/angular-ui-router/release/angular-ui-router.js',
