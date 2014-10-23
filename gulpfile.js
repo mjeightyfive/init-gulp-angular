@@ -41,7 +41,9 @@ var htmlopts = {
     spare: true
 };
 
-gulp.task('clean', del.bind(null, [config.paths.dist]));
+gulp.task('clean', function() {
+    del.bind(null, [config.paths.dist]);
+});
 
 gulp.task('default', ['clean'], function() {
     sequence([
@@ -78,8 +80,7 @@ gulp.task('scripts', function() {
         return streamqueue({
                 objectMode: true
             },
-            gulp.src(config.files.jslibs)
-            .pipe($.cached('images')),
+            gulp.src(config.files.jslibs),
             gulp.src(config.files.jsapp)
             .pipe($.concat('app.js'))
         )
@@ -95,12 +96,12 @@ gulp.task('scripts', function() {
 
         gulp.src(config.files.jslibs)
             .pipe($.concat('libs.js'))
-            .pipe($.cached('libs'))
-            .pipe($.changed(config.paths.dist))
+            .pipe($.newer(config.paths.dist))
             .pipe($.uglify())
             .pipe(gulp.dest(config.paths.dist));
 
         gulp.src(config.files.jsapp)
+            .pipe($.newer(config.paths.dist + '/app.js'))
             .pipe($.concat('app.js'))
             .pipe(gulp.dest(config.paths.dist));
     }
@@ -120,7 +121,7 @@ gulp.task('images', function() {
             progressive: true,
             interlaced: true
         }))
-        .pipe($.cached('images'))
+        .pipe($.changed(config.paths.dist))
         .pipe(gulp.dest(config.paths.dist + '/images'))
         .pipe($.size({
             title: 'images',
@@ -130,7 +131,6 @@ gulp.task('images', function() {
 
 gulp.task('files', function() {
     gulp.src(config.files.other)
-        .pipe($.cached('images'))
         .pipe(gulp.dest(config.paths.dist));
 });
 
@@ -139,7 +139,6 @@ gulp.task('inject', function() {
     if (live) {
 
         gulp.src(config.paths.app + '/index.*')
-            .pipe($.changed(config.paths.dist))
             .pipe($.multinject(['scripts.js'], 'scripts', {
                 urlPrefix: ''
             }))
@@ -153,7 +152,6 @@ gulp.task('inject', function() {
     } else {
 
         gulp.src(config.paths.app + '/index.*')
-            .pipe($.changed(config.paths.dist))
             .pipe($.multinject(['libs.js'], 'jslibs', {
                 urlPrefix: ''
             }))
@@ -173,10 +171,9 @@ gulp.task('styles', function() {
     return streamqueue({
             objectMode: true
         },
-        gulp.src(config.files.css)
-        .pipe($.cached('css')),
+        gulp.src(config.files.css),
         gulp.src(config.files.scss)
-        .pipe($.changed('css', {
+        .pipe($.changed(config.files.scss, {
             extension: '.scss'
         }))
         .pipe($.sourcemaps.init())
@@ -232,6 +229,7 @@ gulp.task('styles', function() {
 });
 
 gulp.task('serve', function() {
+
     browserSync({
         notify: true,
         // Run as an https by uncommenting 'https: true'
