@@ -13,7 +13,7 @@ var files = {
         paths.bower + '/angular-bootstrap/ui-bootstrap-tpls.js',
         paths.bower + '/angular-ui-router/release/angular-ui-router.js',
         paths.bower + '/jquery/dist/jquery.js',
-        paths.bower + '/bootstrap-sass-official/assets/javascripts/bootstrap.js',
+        // paths.bower + '/bootstrap/dist/js/bootstrap.js',
         paths.bower + '/spinjs/spin.js'
     ],
     jsapp: [
@@ -25,12 +25,11 @@ var files = {
         paths.app + '/js/main.js'
     ],
     css: [
-        paths.bower + '/font-awesome/css/font-awesome.css'
+        paths.bower + '/bootstrap/dist/css/bootstrap.css'
     ],
     scss: paths.app + '/scss/*.scss',
     fonts: [
-        paths.bower + '/bootstrap-sass-official/assets/fonts/bootstrap/*',
-        paths.bower + '/font-awesome/fonts/*',
+        paths.bower + '/bootstrap/dist/fonts/*',
         paths.app + '/fonts/*'
     ],
     other: [

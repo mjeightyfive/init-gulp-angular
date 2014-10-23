@@ -63,7 +63,12 @@ gulp.task('html', function() {
         config.paths.app + '/**/*.html',
         '!' + config.paths.app + '/index.*'
     ])
-        .pipe(gulp.dest(config.paths.dist));
+        .pipe($.changed(config.paths.dist))
+        .pipe($.template(templateopts))
+        .pipe(gulp.dest(config.paths.dist))
+        .pipe(reload({
+            stream: true
+        }));
 });
 
 gulp.task('scripts', function() {
@@ -73,7 +78,8 @@ gulp.task('scripts', function() {
         return streamqueue({
                 objectMode: true
             },
-            gulp.src(config.files.jslibs),
+            gulp.src(config.files.jslibs)
+            .pipe($.cached('images')),
             gulp.src(config.files.jsapp)
             .pipe($.concat('app.js'))
         )
@@ -89,13 +95,13 @@ gulp.task('scripts', function() {
 
         gulp.src(config.files.jslibs)
             .pipe($.concat('libs.js'))
+            .pipe($.cached('libs'))
             .pipe($.changed(config.paths.dist))
             .pipe($.uglify())
             .pipe(gulp.dest(config.paths.dist));
 
         gulp.src(config.files.jsapp)
             .pipe($.concat('app.js'))
-            .pipe($.changed(config.paths.dist))
             .pipe(gulp.dest(config.paths.dist));
     }
 });
@@ -114,6 +120,7 @@ gulp.task('images', function() {
             progressive: true,
             interlaced: true
         }))
+        .pipe($.cached('images'))
         .pipe(gulp.dest(config.paths.dist + '/images'))
         .pipe($.size({
             title: 'images',
@@ -123,6 +130,7 @@ gulp.task('images', function() {
 
 gulp.task('files', function() {
     gulp.src(config.files.other)
+        .pipe($.cached('images'))
         .pipe(gulp.dest(config.paths.dist));
 });
 
@@ -131,12 +139,16 @@ gulp.task('inject', function() {
     if (live) {
 
         gulp.src(config.paths.app + '/index.*')
+            .pipe($.changed(config.paths.dist))
             .pipe($.multinject(['scripts.js'], 'scripts', {
                 urlPrefix: ''
             }))
             .pipe($.template(templateopts))
             .pipe($.minifyHtml(htmlopts))
-            .pipe(gulp.dest(config.paths.dist));
+            .pipe(gulp.dest(config.paths.dist))
+            .pipe(reload({
+                stream: true
+            }));
 
     } else {
 
@@ -161,19 +173,27 @@ gulp.task('styles', function() {
     return streamqueue({
             objectMode: true
         },
-        gulp.src(config.files.css),
+        gulp.src(config.files.css)
+        .pipe($.cached('css')),
         gulp.src(config.files.scss)
         .pipe($.changed('css', {
             extension: '.scss'
         }))
-        .pipe($.plumber())
-        .pipe($.rubySass({
-            style: 'expanded',
-            precision: 10
-        })))
+        .pipe($.sourcemaps.init())
+        .pipe($.sass({
+                outputStyle: 'expanded',
+                sourcemap: true,
+                sourcemapPath: config.files.scss
+            })
+            .on('error', function(err) {
+                $.util.log('Sass error: ', $.util.colors.red(err.message));
+                $.util.beep();
+                this.emit('end');
+            }))
+        .pipe($.sourcemaps.write())
         .pipe($.size({
             showFiles: true
-        }))
+        })))
         .pipe($.concat('style.css'))
         .pipe($.
             if (live, $.uncss({
@@ -223,7 +243,8 @@ gulp.task('serve', function() {
         }
     });
 
-    gulp.watch([config.paths.app + '/**/*.html'], ['inject'], reload);
+    gulp.watch([config.paths.app + '/**/index.*'], ['inject'], reload);
+    gulp.watch([config.paths.app + '/**/*.html'], ['html'], reload);
     gulp.watch([config.paths.app + '/scss/**/*.scss'], ['styles']);
     gulp.watch([config.paths.app + '/js/**/*.js'], ['scripts', reload]);
     gulp.watch([config.paths.app + '/images/**/*'], reload);
