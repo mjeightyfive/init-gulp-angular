@@ -41,9 +41,7 @@ var htmlopts = {
     spare: true
 };
 
-gulp.task('clean', function() {
-    del.bind(null, [config.paths.dist]);
-});
+gulp.task('clean', del.bind(null, [config.paths.dist]));
 
 gulp.task('default', ['clean'], function() {
     sequence([
@@ -96,12 +94,11 @@ gulp.task('scripts', function() {
 
         gulp.src(config.files.jslibs)
             .pipe($.concat('libs.js'))
-            .pipe($.newer(config.paths.dist))
+            .pipe($.changed(config.paths.dist))
             .pipe($.uglify())
             .pipe(gulp.dest(config.paths.dist));
 
         gulp.src(config.files.jsapp)
-            .pipe($.newer(config.paths.dist + '/app.js'))
             .pipe($.concat('app.js'))
             .pipe(gulp.dest(config.paths.dist));
     }
@@ -117,10 +114,10 @@ gulp.task('fonts', function() {
 
 gulp.task('images', function() {
     return gulp.src(config.paths.app + '/images/**/*')
-        .pipe($.imagemin({
+        .pipe($.cached($.imagemin({
             progressive: true,
             interlaced: true
-        }))
+        })))
         .pipe($.changed(config.paths.dist))
         .pipe(gulp.dest(config.paths.dist + '/images'))
         .pipe($.size({
@@ -171,9 +168,11 @@ gulp.task('styles', function() {
     return streamqueue({
             objectMode: true
         },
-        gulp.src(config.files.css),
+        gulp.src(config.files.css)
+        .pipe($.sourcemaps.init())
+        .pipe($.sourcemaps.write()),
         gulp.src(config.files.scss)
-        .pipe($.changed(config.files.scss, {
+        .pipe($.changed('css', {
             extension: '.scss'
         }))
         .pipe($.sourcemaps.init())
