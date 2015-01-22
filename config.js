@@ -1,4 +1,5 @@
-var config = {};
+var pkg = require('./package.json'),
+    config = {};
 
 var paths = {
     app: 'app',
@@ -7,16 +8,13 @@ var paths = {
 };
 
 var files = {
-    jslibs: [
+    js: [
         paths.bower + '/angular/angular.js',
         paths.bower + '/angular-bootstrap/ui-bootstrap.js',
         paths.bower + '/angular-bootstrap/ui-bootstrap-tpls.js',
         paths.bower + '/angular-ui-router/release/angular-ui-router.js',
         paths.bower + '/jquery/dist/jquery.js',
-        // paths.bower + '/bootstrap/dist/js/bootstrap.js',
-        paths.bower + '/spinjs/spin.js'
-    ],
-    jsapp: [
+        paths.bower + '/spinjs/spin.js',
         paths.app + '/js/app.js',
         paths.app + '/js/services.js',
         paths.app + '/js/controllers.js',
@@ -25,11 +23,13 @@ var files = {
         paths.app + '/js/main.js'
     ],
     css: [
-        paths.bower + '/bootstrap/dist/css/bootstrap.css'
+        // bower / libraries etc.
+        paths.bower + '/bootstrap/dist/css/bootstrap.css',
+        // compiled from scss
+        paths.dist + '/css/style.css'
     ],
     scss: paths.app + '/scss/*.scss',
     fonts: [
-        paths.bower + '/bootstrap/dist/fonts/*',
         paths.app + '/fonts/*'
     ],
     other: [
@@ -40,7 +40,45 @@ var files = {
     ]
 };
 
+var ignoredCssClasses = [
+    /:hover/,
+    /:active/,
+    /:visited/,
+    /:focus/,
+    /:checked/,
+    /.active/,
+    /.open/
+];
+
+var autoprefixer_browsers = [
+    'ie >= 9',
+    'ie_mob >= 10',
+    'ff >= 30',
+    'chrome >= 34',
+    'safari >= 7',
+    'opera >= 23',
+    'ios >= 7',
+    'android >= 4.4',
+    'bb >= 10'
+];
+
+var templateopts = {
+    name: pkg.name,
+    author: pkg.author
+};
+
+var htmlopts = {
+    empty: true,
+    quotes: true,
+    conditionals: true,
+    spare: true
+};
+
 config.paths = paths;
 config.files = files;
+config.autoprefixer_browsers = autoprefixer_browsers;
+config.templateopts = templateopts;
+config.htmlopts = htmlopts;
+config.ignoredCssClasses = ignoredCssClasses;
 
 module.exports = config;
