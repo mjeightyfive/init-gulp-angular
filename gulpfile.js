@@ -71,6 +71,7 @@ gulp.task('styles', function() {
             objectMode: true
         },
         gulp.src(config.files.css)
+        .pipe($.cached())
         .pipe($.sourcemaps.init())
         .pipe($.sourcemaps.write()),
         gulp.src(config.files.scss)
@@ -111,6 +112,7 @@ gulp.task('styles', function() {
 gulp.task('scripts', function() {
 
     gulp.src(config.files.js)
+        .pipe($.cached())
         .pipe($.changed(config.paths.dist))
         .pipe($.
             if (live, $.concat('scripts.js')))
