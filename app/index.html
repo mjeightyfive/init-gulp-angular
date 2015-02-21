@@ -2,7 +2,7 @@
 <!--[if lt IE 7]><html class="no-js lt-ie9 lt-ie8 lt-ie7"><![endif]-->
 <!--[if IE 7]><html class="no-js lt-ie9 lt-ie8"><![endif]-->
 <!--[if IE 8]><html class="no-js lt-ie9"><![endif]-->
-<!--[if gt IE 8]><!--><html class="no-js" ng-app="myApp"><!--<![endif]-->
+<!--[if gt IE 8]><!--><html class="no-js"><!--<![endif]-->
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -20,42 +20,28 @@
         <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-precomposed.png">
         <!-- Tile icon for Win8 (144x144 + tile color) -->
         <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
-        <meta name="msapplication-TileColor" content="#3372DF">
+        <meta name="msapplication-TileColor" content="#dba123">
         <!-- SEO: If your mobile URL is different from the desktop URL, add a canonical link to the desktop page https://developers.google.com/webmasters/smartphone-sites/feature-phones -->
-        <!--
-        <link rel="canonical" href="http://www.example.com/">
-        -->
+        <!-- <link rel="canonical" href="http://www.example.com/"> -->
         <!-- inject:css -->
         <!-- endinject -->
         <script src="files/modernizr.js"></script>
     </head>
-    <body>
+    <body ng-app="myApp">
         <!--[if lt IE 10]><p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p><![endif]-->
         <div class="container">
-            <div class="row">
-                <nav class="navbar navbar-default" role="navigation">
-                    <div class="navbar-header">
-                        <a class="navbar-brand" ui-sref="home">
-                        <%= name %>
-                        </a>
-                        <ul class="nav navbar-nav">
-                            <li><a ui-sref="home">Home</a></li>
-                            <li><a ui-sref="about">About</a></li>
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-            <div class="row">
-                <div class="well" ng-controller="MainController">
-                    <div ui-view></div>
+            <div class="header">
+                <div class="home-menu pure-menu pure-menu-open pure-menu-horizontal">
+                    <a class="pure-menu-heading" href="index.html"><%= name %></a>
+                    <ul>
+                        <li><a ui-sref="home">Home</a></li>
+                        <li><a ui-sref="about">About</a></li>
+                    </ul>
                 </div>
             </div>
-            <p id="data"></p>
-            <div class="row">
-                <div class="footer">
-                    <a href="http://twitter.com/mjeightyfive">
-                    <i class="fa fa-twitter-square"></i> <%= author %>
-                    </a>
+            <div class="pure-g main-content">
+                <div class="pure-u-1" ng-controller="MainController">
+                    <div ui-view></div>
                 </div>
             </div>
         </div>
@@ -67,7 +53,7 @@
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
             m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
             })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-            ga('create', 'UA-XXXXX-X', 'auto');
+            ga('create', 'UA-58944845-3', 'auto');
             ga('send', 'pageview');
         </script>
     </body>

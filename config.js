@@ -24,7 +24,11 @@ var files = {
     ],
     css: [
         // bower / libraries etc.
-        paths.bower + '/bootstrap/dist/css/bootstrap.css',
+        paths.bower + '/normalize-css/normalize.css',
+        paths.bower + '/pure/pure.css',
+        paths.bower + '/pure/grids.css',
+        paths.bower + '/pure/grids-responsive.css',
+        paths.bower + '/pure/grids-units.css',
         // compiled from scss
         paths.dist + '/css/style.css'
     ],

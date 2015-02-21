@@ -1,17 +1,50 @@
-// /* FONT FACE */
-// @mixin font-face( $name, $filename, $svg_id, $style:normal, $weight:normal ) {
-// 	@font-face {
-// 		font-family: "#{$name}";
-// 		font-style: $style;
-// 		font-weight: $weight;
-// 		src: font-url( "#{$filename}.eot" );
-// 		src: font-url( "#{$filename}.eot?#iefix" ) format( "embedded-opentype" ),
-// 			 font-url( "#{$filename}.woff" ) format( "woff" ),
-// 			 font-url( "#{$filename}.ttf" ) format( "truetype" ),
-// 			 font-url( "#{$filename}.svg##{$svg_id}" ) format( "svg" );
-// 	}
-// }
+@mixin font-face($font-family, $file-path, $font-weight, $font-style) {
+  @font-face {
+    font-family: $font-family;
+      src: url('#{$file-path}.eot');
+      src: url('#{$file-path}.eot?#iefix') format('embedded-opentype'),
+           url('#{$file-path}.woff') format('woff'),
+           url('#{$file-path}.ttf') format('truetype'),
+           url('#{$file-path}.svg##{$font-family}') format('svg');
+    font-weight: $font-weight;
+    font-style: $font-style;
+  }
+  // Chrome for Windows rendering fix: http://www.adtrak.co.uk/blog/font-face-chrome-rendering/
+  @media screen and (-webkit-min-device-pixel-ratio: 0) {
+    @font-face {
+      font-family: $font-family;
+        src: url('#{$file-path}.svg##{$font-family}') format('svg');
+    }
+  }
+}
 
-// .pt-sans {
-// 	@include font-face( PT Sans, fonts/PT_Sans-Web-Regular, f39585f1b656e5f9297b79e526233403, normal, normal )
-// }
+@include font-face(ZapfinoOne-One, '../fonts/ZapfinoOne', 400, normal);
+
+@mixin Zapfino {
+  font-family: 'Zapfino', arial, sans-serif;
+}
+
+@include font-face(Karma-Regular, '../fonts/Karma-Regular', 400, normal);
+
+@mixin Karma-Regular {
+  font-family: 'Karma-Regular', arial, sans-serif;
+}
+
+@include font-face(Karma-Regular, '../fonts/Karma-Regular', 400, normal);
+
+@mixin Karma-Regular {
+  font-family: 'Karma-Regular', arial, sans-serif;
+}
+
+@include font-face(Roboto-Thin, '../fonts/Roboto-Thin', 400, normal);
+
+@mixin Roboto-Thin {
+  font-family: 'Roboto-Thin', arial, sans-serif;
+}
+
+@include font-face(OpenSans-Light, '../fonts/OpenSans-Light', 400, normal);
+
+@mixin OpenSans-Light {
+  font-family: 'OpenSans-Light', arial, sans-serif;
+}
+

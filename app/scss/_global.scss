@@ -1,7 +1,95 @@
-#data {
-	padding: 20px;
+*,
+*:after,
+*:before {
+  @include box-sizing(border-box);
 }
 
-.well {
-    // background: #b00
+body {
+    @include Roboto-Thin;
 }
+
+.pure-g [class *= "pure-u"] {
+    @include Karma-Regular;
+    color: $light-grey;
+    line-height: 1.2;
+    padding: 1em;
+
+    p {
+        margin: 0;
+    }
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: $dark-grey;
+    @include Roboto-Thin;
+}
+
+h1 {
+    text-transform: uppercase;
+}
+
+ a {
+    @include link-colors($grapefruit, $salmon);
+    text-decoration: none;
+    font-weight: bold;
+    letter-spacing: -1px;
+}
+
+.container {
+
+    margin: 2em auto;
+
+    @include breakpoint(768) {
+        width: 95%;
+    }
+
+    @include breakpoint(1140) {
+        width: 80%;
+    }
+}
+
+.header {
+
+
+    .pure-menu-heading {
+        color: $black;
+        @include Zapfino;
+        font-size: 22px;
+        text-transform: none;
+    }
+
+    .pure-menu {
+
+        li {
+            a,
+            a:visited,
+            a:link {
+                color: $dark-grey;
+                padding: auto;
+            }
+
+            a:hover {
+                background: $grapefruit;
+                color: $white;
+            }
+        }
+    }
+}
+
+.main-content {
+    height: 400px;
+}
+
+.grid-example {
+
+    div {
+        background: $medium;
+        border: 1px solid white;
+    }
+
+    p {
+        text-align: center;
+        color: white;
+    }
+}
+

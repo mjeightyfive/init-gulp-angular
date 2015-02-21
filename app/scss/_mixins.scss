@@ -1,30 +1,3 @@
-/* Complementary Color Scheme */
-
-$complement1: adjust-hue($base, 180);
-$complement2: darken(adjust-hue($base, 180), 5%);
-$lighten1: lighten($base, 15%);
-$lighten2: lighten($base, 30%);
- 
-// .one   { background: $base; }
-// .two   { background: $complement1; }
-// .three { background: $complement2; }
-// .four  { background: $lighten1; }
-// .five  { background: $lighten2; }
-
-/* Subtle Color Scheme */
-
-$lighter1: lighten(adjust-hue($base, 5), 10%);
-$lighter2: lighten(adjust-hue($base, 10), 20%);
-$darker1: darken(adjust-hue($base, -5), 10%);
-$darker2: darken(adjust-hue($base, -10), 20%);
- 
-/* Implementation */
-.one   { background: $base; }
-.two   { background: $lighter1; }
-.three { background: $lighter2; }
-.four  { background: $darker1; }
-.five  { background: $darker2; }
-
 @mixin breakpoint($point) {
   @if $point == 480 {
     @media (min-width: 480px) { @content; }
@@ -39,9 +12,9 @@ $darker2: darken(adjust-hue($base, -10), 20%);
 
 // .page-wrap {
 //   width: 75%;
-//   @include breakpoint(large) { width: 60%; }
-//   @include breakpoint(medium) { width: 80%; }
-//   @include breakpoint(small) { width: 95%; }
+//   @include breakpoint(480) { width: 60%; }
+//   @include breakpoint(768) { width: 80%; }
+//   @include breakpoint(1140) { width: 95%; }
 // }
 
 @mixin vertically-center ($child: ".vcentered") {
@@ -242,4 +215,30 @@ $darker2: darken(adjust-hue($base, -10), 20%);
 	transform:         scaleX($scaleX);
 	filter:            FlipH;
 	-ms-filter:        "FlipH";
+}
+
+// links
+
+@mixin link-colors($normal, $hover: false, $active: false, $visited: false, $focus: false) {
+  color: $normal;
+  @if $visited {
+    &:visited {
+      color: $visited;
+    }
+  }
+  @if $focus {
+    &:focus {
+      color: $focus;
+    }
+  }
+  @if $hover {
+    &:hover {
+      color: $hover;
+    }
+  }
+  @if $active {
+    &:active {
+      color: $active;
+    }
+  }
 }
