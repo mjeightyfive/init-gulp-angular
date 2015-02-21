@@ -2,7 +2,11 @@
 
 var gulp = require('gulp'),
     glob = require('glob'),
-    $ = require('gulp-load-plugins')(),
+    $ = require('gulp-load-plugins')({
+        rename: {
+            'gulp-mocha-phantomjs': 'gmphjs'
+        }
+    }),
     del = require('del'),
     sequence = require('run-sequence'),
     streamqueue = require('streamqueue'),
@@ -19,16 +23,33 @@ if (!live) {
 gulp.task('clean', del.bind(null, [config.paths.dist]));
 
 gulp.task('default', ['clean'], function() {
-    sequence([
-            'styles',
-            'scripts',
-            'fonts',
-            'images',
-            'files'
-        ],
-        'html',
-        'serve'
-    );
+
+    if (live) {
+        sequence([
+                'styles',
+                'scripts',
+                'fonts',
+                'images',
+                'files'
+            ],
+            'html',
+            'serve',
+            'jshint',
+            'test'
+        );
+    } else {
+        sequence([
+                'styles',
+                'scripts',
+                'fonts',
+                'images',
+                'files'
+            ],
+            'html',
+            'serve'
+        );
+    }
+
 });
 
 gulp.task('html', function() {
@@ -41,7 +62,7 @@ gulp.task('html', function() {
     } else {
         assets.css = gulp.src(config.files.css);
         assets.js = gulp.src(config.files.js);
-    };
+    }
 
     gulp.src(config.paths.app + '/**/*.html')
         .pipe($.inject(assets.css, {
@@ -113,7 +134,6 @@ gulp.task('scripts', function() {
 
     gulp.src(config.files.js)
         .pipe($.cached())
-        .pipe($.changed(config.paths.dist))
         .pipe($.
             if (live, $.concat('scripts.js')))
         .pipe($.
@@ -156,6 +176,7 @@ gulp.task('files', function() {
 
 gulp.task('serve', function() {
     browserSync({
+        open: false,
         notify: true,
         // Run as an https by uncommenting 'https: true'
         // Note: this uses an unsigned certificate which on first access
@@ -181,7 +202,18 @@ gulp.task('jshint', function() {
             once: true
         }))
         .pipe($.jshint())
-        .pipe($.jshint.reporter('jshint-stylish'))
-        .pipe($.
-            if (!browserSync.active, $.jshint.reporter('fail')));
+        .pipe($.jshint.reporter('jshint-stylish'));
+        // .pipe($.
+        //     if (!browserSync.active, $.jshint.reporter('fail')));
+});
+
+function handleError(err) {
+    console.log(err.toString());
+}
+
+gulp.task('test', function() {
+    gulp.src('./tests/*.html')
+        .pipe($.gmphjs())
+        .on('error', handleError)
+        .emit('end');
 });
